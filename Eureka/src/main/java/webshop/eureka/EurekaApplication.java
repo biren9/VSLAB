@@ -1,4 +1,4 @@
-package com.example.demo;
+package webshop.eureka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
