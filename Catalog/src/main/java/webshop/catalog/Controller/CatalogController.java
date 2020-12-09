@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import webshop.catalog.Client.ProductClient;
 import webshop.catalog.Model.Product;
 
 import javax.validation.Valid;
@@ -22,12 +21,6 @@ class CatalogController {
             @NotNull @ApiParam(value = "minPrice", required = false) @Valid @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
             @NotNull @ApiParam(value = "maxPrice", required = false) @Valid @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice
     ) {
-
-
-        ProductClient client = new ProductClient();
-        List<Product> products = client.fetchProducts();
-        System.out.println(products.size());
-
 
         return new ResponseEntity(new ArrayList<Product>(), HttpStatus.OK);
     }
