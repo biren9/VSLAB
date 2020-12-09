@@ -2,6 +2,7 @@ package webshop.product.Controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -83,8 +84,13 @@ public class ProductsApiController {
         } 		
     }
 
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> exactProduct() {
+        return new ResponseEntity<List<Product>>(productRepo.findAll(), HttpStatus.OK);
+    }
+
     @GetMapping("/products/{id}")
-    public ResponseEntity<Product> exactProduct(@ApiParam(value = "product Id",required=true) @PathVariable("id") Integer id) {    	
+    public ResponseEntity<Product> exactProducts(@ApiParam(value = "product Id",required=true) @PathVariable("id") Integer id) {
     	try {
     		Product product = productRepo.findById(id).orElse(null);
     		if (product == null) {

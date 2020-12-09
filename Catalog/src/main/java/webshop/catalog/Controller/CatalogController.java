@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import webshop.catalog.Client.ProductClient;
 import webshop.catalog.Model.Product;
 
 import javax.validation.Valid;
@@ -22,11 +23,11 @@ class CatalogController {
             @NotNull @ApiParam(value = "maxPrice", required = false) @Valid @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice
     ) {
 
-        System.out.println("##############################");
-        System.out.println("Contains: "+contains);
-        System.out.println("minPrice: "+minPrice);
-        System.out.println("maxPrice: "+maxPrice);
-        System.out.println("##############################");
+
+        ProductClient client = new ProductClient();
+        List<Product> products = client.fetchProducts();
+        System.out.println(products.size());
+
 
         return new ResponseEntity(new ArrayList<Product>(), HttpStatus.OK);
     }
@@ -58,5 +59,4 @@ class CatalogController {
     public ResponseEntity deleteCategory(@PathVariable("id") Long id) {
         return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
     }
-
 }
