@@ -2,8 +2,6 @@ package webshop.product.Model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -40,11 +38,21 @@ public class Product   {
   @JsonProperty("price")
   private BigDecimal price = null;
 
+  public Product () {}
+  
+  public Product(String name, String detail, BigDecimal price) {
+      this.name = name;
+      this.price = price;
+      this.detail = detail;
+  }
+  
+  
   public Product id(Integer id) {
     this.id = id;
     return this;
   }
 
+ 
   /**
    * Get id
    * @return id
