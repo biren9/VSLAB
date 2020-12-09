@@ -45,17 +45,17 @@ public class UserApiController {
         String firstname = request.getHeader("firstname");
 
         if (username == null || password1 == null || password2 == null || firstname == null) {
-            return new ResponseEntity<Boolean>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<Boolean>(HttpStatus.NOT_ACCEPTABLE);
         }
 
         try {
             Boolean isUsernameAlreadyTaken = !userRepository.findByUsername(username).isEmpty();
             if (isUsernameAlreadyTaken) {
-                return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.NOT_ACCEPTABLE);
             }
             Boolean passwordEqual = password1.equals(password2);
             if (!passwordEqual) {
-                return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.NOT_ACCEPTABLE);
             }
 
             User newUser = new User(username, password1, firstname);
