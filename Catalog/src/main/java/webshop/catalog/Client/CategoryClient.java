@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import webshop.catalog.Model.Category;
 
@@ -22,8 +24,7 @@ public class CategoryClient {
 
     private final Map<Long, Category> categoryCache = new LinkedHashMap<>();
 
-    @Autowired
-    private RestTemplate categoryRestTemplate;
+    private RestTemplate categoryRestTemplate = restTemplate();
 
     @LoadBalanced
     @Bean
@@ -114,5 +115,15 @@ public class CategoryClient {
         return false;
     }
 
-
+    @LoadBalanced
+    @Bean
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+            protected boolean hasError(HttpStatus statusCode) {
+                return statusCode.value() >= 400;
+            }
+        });
+        return restTemplate;
+    }
 }

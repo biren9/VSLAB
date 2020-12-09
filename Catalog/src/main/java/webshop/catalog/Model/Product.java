@@ -17,11 +17,20 @@ public class Product   {
 
   public Product () {}
   
-  public Product(String name, String detail, BigDecimal price) {
+  public Product(String name, String detail, BigDecimal price, Category category) {
       this.name = name;
       this.price = price;
       this.detail = detail;
+      this.category = category;
   }
+
+    public Product(String name, String detail, BigDecimal price, Long categoryID) {
+        this.name = name;
+        this.price = price;
+        this.detail = detail;
+        this.categoryId = categoryID;
+        this.category = new Category(categoryID, null);
+    }
 
   public Long getId() {
 	return id;

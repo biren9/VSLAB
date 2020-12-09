@@ -10,4 +10,9 @@ import org.springframework.validation.annotation.Validated;
 public class Category {
     private Long id;
     private String name;
+
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
