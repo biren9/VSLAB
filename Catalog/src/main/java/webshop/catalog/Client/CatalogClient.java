@@ -25,24 +25,24 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import webshop.catalog.Model.*;
 
-@Component
-public class CatalogClient {
-
-	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
-	private final Map<Long, Category> categoryCache = new LinkedHashMap<Long, Category>();
-
-	@Autowired
-	private RestTemplate restTemplate;
-
-	@HystrixCommand(fallbackMethod = "getProductsCache", commandProperties = {
-			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
-	public Product getProduct(Long productId) {
-		Product tmpProduct = restTemplate.getForObject("http://Product/products/" + productId, Product.class);
-		productCache.putIfAbsent(productId, tmpProduct);
-		return tmpProduct;
-	}
-	
-	public Product getProductCache(Integer productId) {
-		return productCache.getOrDefault(productId, new Product());
-	}
-}
+//@Component
+//public class CatalogClient {
+//
+//	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
+//	private final Map<Long, Category> categoryCache = new LinkedHashMap<Long, Category>();
+//
+//	@Autowired
+//	private RestTemplate restTemplate;
+//
+//	@HystrixCommand(fallbackMethod = "getProductsCache", commandProperties = {
+//			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
+//	public Product getProduct(Long productId) {
+//		Product tmpProduct = restTemplate.getForObject("http://Product/products/" + productId, Product.class);
+//		productCache.putIfAbsent(productId, tmpProduct);
+//		return tmpProduct;
+//	}
+//
+//	public Product getProductCache(Integer productId) {
+//		return productCache.getOrDefault(productId, new Product());
+//	}
+//}
