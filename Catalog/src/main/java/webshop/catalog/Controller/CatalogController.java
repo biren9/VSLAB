@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import webshop.catalog.Client.CatalogClient;
 import webshop.catalog.Client.CategoryClient;
 import webshop.catalog.Client.ProductClient;
 import webshop.catalog.Model.Category;
@@ -13,7 +12,6 @@ import webshop.catalog.Model.Product;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController()

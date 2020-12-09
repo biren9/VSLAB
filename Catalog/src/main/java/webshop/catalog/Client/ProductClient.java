@@ -21,19 +21,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import webshop.catalog.Model.*;
 
 @Component
-public class ProductClient {
+public class ProductClient extends BaseClient {
 
 	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
 
-	@Autowired
-	private RestTemplate restTemplate;
-	
-	@LoadBalanced
-	@Bean
-	public RestTemplate productRestTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
-	
+	private RestTemplate restTemplate = restTemplate();
 
 	//get all Products/ filter Products
 	@HystrixCommand(fallbackMethod = "getProductsCache", commandProperties = {
