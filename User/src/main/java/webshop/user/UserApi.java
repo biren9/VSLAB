@@ -5,35 +5,14 @@
  */
 package webshop.user;
 
-import io.swagger.annotations.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2020-12-08T15:00:53.920Z")
-
-@Api(value = "user", description = "the user API")
-@RequestMapping(value = "/vslab/Aufgabe2/1.0.0")
-public interface UserApi {
-
-    @ApiOperation(value = "", nickname = "register", notes = "", response = Boolean.class, tags={ "user", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "register success", response = Boolean.class),
-        @ApiResponse(code = 406, message = "Not Acceptable", response = Error.class) })
-    @RequestMapping(value = "/user/register",
-        produces = { "application/json" }, 
-        consumes = { "multipart/form-data" },
-        method = RequestMethod.POST)
-    ResponseEntity<Boolean> register(@ApiParam(value = "", required=true) @RequestParam(value="username", required=true)  String username,@ApiParam(value = "", required=true) @RequestParam(value="password1", required=true)  String password1,@ApiParam(value = "", required=true) @RequestParam(value="password2", required=true)  String password2,@ApiParam(value = "", required=true) @RequestParam(value="firstname", required=true)  String firstname,@ApiParam(value = "", required=true) @RequestParam(value="lastname", required=true)  String lastname);
-
-}
+//@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2020-12-08T15:00:53.920Z")
+//
+//@RequestMapping("/user")
+//public interface UserApi {
+//    @RequestMapping(value = "/register",
+//        produces = { "application/json" },
+//        consumes = { "multipart/form-data" },
+//        method = RequestMethod.PUT)
+//    ResponseEntity<Boolean> register(@RequestBody LoginForm loginForm);
+//
+//}
