@@ -7,7 +7,6 @@ eureka:  instance:
     health-check-url-path: /health
     
 zuul:
-  ignored-services: '*'
+  ignoredServices: '*'
   routes:
-    Product: /product-service/**
-    Category: /category-service/**
+    catalog: /api-service/**
