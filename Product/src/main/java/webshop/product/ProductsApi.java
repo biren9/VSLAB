@@ -20,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+
+import java.math.BigDecimal;
 import java.util.List;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2020-12-07T12:32:53.920Z")
 
 @Api(value = "products", description = "the products API")
@@ -35,7 +38,7 @@ public interface ProductsApi {
     @RequestMapping(value = "/products",
         produces = { "application/json" }, 
         method = RequestMethod.POST)
-    ResponseEntity<Boolean> addProduct(@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) String price,@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Integer categoryId);
+    ResponseEntity<Boolean> addProduct(@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Integer categoryId);
 
 
     @ApiOperation(value = "", nickname = "deleteProduct", notes = "", response = Boolean.class, tags={ "product", })
