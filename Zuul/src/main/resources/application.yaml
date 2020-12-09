@@ -9,5 +9,5 @@ eureka:  instance:
 zuul:
   ignored-services: '*'
   routes:
-    user-proxy: /user-api/**
-    #Todo: öffentliche api proxies bereitstellen 
+    Product: /product-service/**
+    Category: /category-service/**

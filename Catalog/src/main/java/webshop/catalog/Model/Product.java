@@ -13,6 +13,7 @@ public class Product   {
   private String detail;
   private BigDecimal price;
   private Category category;
+  private Long categoryId;
 
   public Product () {}
   
@@ -21,5 +22,10 @@ public class Product   {
       this.price = price;
       this.detail = detail;
   }
+
+  public Long getId() {
+	return id;
+  }
+  
 }
 
