@@ -2,10 +2,23 @@ server:
   port: 8082
 spring:
   application:
-    name: User 
-eureka:  client:    service-url:
+    name: User
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  datasource:
+    url: jdbc:mysql://localhost:3306/user
+    username: vs
+    password: test
+eureka:
+  client:
+    service-url:
       default-zone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 5
-    metadata-map:      instance-id: "${spring.application.name}:${random.value}"
+    metadata-map:
+      instance-id: "${spring.application.name}:${random.value}"
