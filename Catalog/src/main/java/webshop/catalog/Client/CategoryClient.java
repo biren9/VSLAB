@@ -109,15 +109,4 @@ public class CategoryClient extends BaseClient {
         return false;
     }
 
-    @LoadBalanced
-    @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
-            protected boolean hasError(HttpStatus statusCode) {
-                return statusCode.value() >= 400;
-            }
-        });
-        return restTemplate;
-    }
 }

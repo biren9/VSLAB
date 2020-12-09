@@ -15,4 +15,9 @@ public class Category {
         this.id = id;
         this.name = name;
     }
+
+	public Long getId() {
+		// TODO Auto-generated method stub
+		return id;
+	}
 }

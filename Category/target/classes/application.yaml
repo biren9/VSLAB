@@ -2,7 +2,7 @@ server:
   port: 8084
 spring:
   application:
-    name: Category
+    name: category-service
   jpa:
     hibernate:
       ddl-auto: update

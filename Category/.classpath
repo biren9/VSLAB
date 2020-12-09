@@ -28,14 +28,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/nicop/.m2/repository/org/springframework/cloud/spring-cloud-netflix-eureka-server/3.0.0-M6/spring-cloud-netflix-eureka-server-3.0.0-M6.jar" sourcepath="C:/Users/nicop/.m2/repository/org/springframework/cloud/spring-cloud-netflix-eureka-server/3.0.0-M6/spring-cloud-netflix-eureka-server-3.0.0-M6-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="org.springframework.cloud"/>
-			<attribute name="maven.artifactId" value="spring-cloud-netflix-eureka-server"/>
-			<attribute name="maven.version" value="3.0.0-M6"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
