@@ -1,11 +1,7 @@
 package webshop.catalog.Client;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -13,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -67,7 +67,22 @@ public class ProductClient extends BaseClient {
 	@HystrixCommand(fallbackMethod = "createProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean createProduct(Product payload) {
-		restTemplate.postForObject("http://"+host+"/products", payload, Product.class);
+
+		Map<String, String> params = new HashMap<>();
+		params.put("name", payload.getName());
+		params.put("detail", payload.getDetail());
+		params.put("price", ""+payload.getPrice());
+		params.put("categoryId", ""+payload.getCategoryId());
+
+		String url = "http://"+host+"/products";
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			builder.queryParam(entry.getKey(), entry.getValue());
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Accept", "application/json");
+		HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, new HttpEntity(headers), String.class);
 		return true;
 	}
 	

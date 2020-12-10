@@ -51,14 +51,14 @@ public class ProductsApiController {
     		@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
     		@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
     		@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Integer categoryId) {
+    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Long categoryId) {
         
         try {
             Boolean productExists = !productRepo.findByName(name).isEmpty();
             if (productExists) {
                 return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.NOT_ACCEPTABLE);
             }
-        	Product newProduct = new Product (name, detail, price);
+        	Product newProduct = new Product (name, detail, price, categoryId);
             productRepo.save(newProduct);
             return new ResponseEntity<Boolean>(HttpStatus.ACCEPTED);
             
@@ -110,7 +110,7 @@ public class ProductsApiController {
     		@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
     		@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
     		@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Integer categoryId) {
+    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Long categoryId) {
     	try {
     		Product product = productRepo.findById(id).orElse(null);
     		if (product == null) {
@@ -119,6 +119,7 @@ public class ProductsApiController {
              product.setName(name);
              product.setDetail(detail);
              product.setPrice(price);
+             product.setCategoryId(categoryId);
              productRepo.save(product);
              return new ResponseEntity<Boolean>(HttpStatus.OK);    		
     	} catch (IOException e) {
