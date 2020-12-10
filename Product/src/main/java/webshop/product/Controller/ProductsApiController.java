@@ -15,15 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.*;
 import webshop.product.Model.Product;
@@ -48,25 +40,15 @@ public class ProductsApiController {
     
     @PostMapping("/products")
     public ResponseEntity<Boolean> addProduct(
-    		@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
-    		@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
-    		@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Long categoryId) {
-        
-        try {
-            Boolean productExists = !productRepo.findByName(name).isEmpty();
-            if (productExists) {
-                return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.NOT_ACCEPTABLE);
-            }
-        	Product newProduct = new Product (name, detail, price, categoryId);
-            productRepo.save(newProduct);
-            return new ResponseEntity<Boolean>(HttpStatus.ACCEPTED);
-            
-        } catch (IOException e) {
-            log.error("Couldn't serialize response for content type application/json", e);
-            return new ResponseEntity<Boolean>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    		@ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct) {
 
+            Boolean productExists = !productRepo.findByName(newProduct.getName()).isEmpty();
+            if (productExists) {
+                return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            productRepo.save(newProduct);
+            return new ResponseEntity<Boolean>(true, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/products/{id}")
@@ -107,19 +89,16 @@ public class ProductsApiController {
     @PutMapping("/products/{id}")
     public ResponseEntity<Boolean> updateProduct(
     		@ApiParam(value = "product Id",required=true) @PathVariable("id") Integer id,
-    		@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
-    		@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
-    		@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Long categoryId) {
+    		@ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct) {
     	try {
     		Product product = productRepo.findById(id).orElse(null);
     		if (product == null) {
                  return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.NOT_ACCEPTABLE);
              }
-             product.setName(name);
-             product.setDetail(detail);
-             product.setPrice(price);
-             product.setCategoryId(categoryId);
+             product.setName(newProduct.getName());
+             product.setDetail(newProduct.getDetail());
+             product.setPrice(newProduct.getPrice());
+             product.setCategoryId(newProduct.getCategoryID());
              productRepo.save(product);
              return new ResponseEntity<Boolean>(HttpStatus.OK);    		
     	} catch (IOException e) {

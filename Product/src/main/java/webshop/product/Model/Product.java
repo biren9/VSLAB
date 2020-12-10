@@ -38,16 +38,16 @@ public class Product   {
   @JsonProperty("price")
   private BigDecimal price = null;
 
-  @JsonProperty("categoryId")
-  private Long categoryId = null;
+  @JsonProperty("categoryID")
+  private Long categoryID = null;
 
   public Product () {}
   
-  public Product(String name, String detail, BigDecimal price, Long categoryId) {
+  public Product(String name, String detail, BigDecimal price, Long categoryID) {
       this.name = name;
       this.price = price;
       this.detail = detail;
-      this.categoryId = categoryId;
+      this.categoryID = categoryID;
   }
   
   
@@ -57,12 +57,12 @@ public class Product   {
   }
 
 
-  public Long getCategoryId() {
-    return categoryId;
+  public Long getCategoryID() {
+    return categoryID;
   }
 
-  public void setCategoryId(Long categoryId) {
-    this.categoryId = categoryId;
+  public void setCategoryId(Long categoryID) {
+    this.categoryID = categoryID;
   }
 
   /**

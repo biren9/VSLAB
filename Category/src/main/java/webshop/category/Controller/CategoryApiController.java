@@ -27,9 +27,8 @@ public class CategoryApiController {
 
     @PostMapping("/categories")
     public ResponseEntity<Boolean> createCategory(
-            @NotNull @ApiParam(value = "Category name", required = true) @Valid @RequestParam(value = "name", required = true) String name
+            @ApiParam(value = "New product." ,required=true ) @RequestBody Category newCategory
     ) {
-        Category newCategory = new Category(name);
         categoryRepository.save(newCategory);
         return new ResponseEntity(true, HttpStatus.OK);
     }
@@ -46,12 +45,12 @@ public class CategoryApiController {
     @PutMapping("/categories/{id}")
     public ResponseEntity<Boolean> updateCategory(
             @PathVariable("id") Long id,
-            @NotNull @ApiParam(value = "Category name", required = true) @Valid @RequestParam(value = "name", required = true) String name
+            @ApiParam(value = "New product." ,required=true ) @RequestBody Category newCategory
     ) {
         Optional<Category> optinalCategory = categoryRepository.findById(id);
         if (optinalCategory.isPresent()) {
             Category category = optinalCategory.get();
-            category.setName(name);
+            category.setName(newCategory.getName());
             categoryRepository.save(category);
             return new ResponseEntity(true, HttpStatus.OK);
         }

@@ -29,7 +29,7 @@ class CatalogController {
 
         Iterable<Product> products = productClient.getProducts(contains, minPrice, maxPrice);
         for (Product product : products) {
-            Category category = categoryClient.getCategory(product.getCategoryId());
+            Category category = categoryClient.getCategory(product.getCategoryID());
             product.setCategory(category);
         }
 
@@ -38,17 +38,13 @@ class CatalogController {
 
     @PostMapping("/catalog/products")
     public ResponseEntity<Boolean> createCatalog(
-            @NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
-            @NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
-            @NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-            @NotNull @ApiParam(value = "Category id", required = true) @Valid @RequestParam(value = "categoryID", required = true) Long categoryID
+            @ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct
     ) {
 
-        if (categoryClient.getCategory(categoryID) == null) {
+        if (categoryClient.getCategory(newProduct.getCategoryID()) == null) {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
 
-        Product newProduct = new Product(name, detail, price, categoryID);
         Boolean success = productClient.createProduct(newProduct);
 
         if (success) {
@@ -61,12 +57,9 @@ class CatalogController {
     @PutMapping("/catalog/products/{id}")
     public ResponseEntity<Boolean> updateCategory(
             @PathVariable("id") Long id,
-            @NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
-            @NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
-            @NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-            @NotNull @ApiParam(value = "Category id", required = true) @Valid @RequestParam(value = "categoryID", required = true) Long categoryID
+            @ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct
     ) {
-        if (categoryClient.getCategory(categoryID) == null) {
+        if (categoryClient.getCategory(newProduct.getCategoryID()) == null) {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
 
@@ -75,10 +68,10 @@ class CatalogController {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
 
-        product.setCategoryId(categoryID);
-        product.setPrice(price);
-        product.setDetail(detail);
-        product.setName(name);
+        product.setCategoryID(newProduct.getCategoryID());
+        product.setPrice(newProduct.getPrice());
+        product.setDetail(newProduct.getDetail());
+        product.setName(newProduct.getName());
 
         Boolean success = productClient.updateProduct(id, product);
 
@@ -95,7 +88,7 @@ class CatalogController {
         Boolean hasProductWithCurrentCategory = false;
 
         for (Product product: products) {
-            if (product.getCategoryId().equals(id)) {
+            if (product.getCategoryID().equals(id)) {
                 hasProductWithCurrentCategory = true;
                 break;
             }

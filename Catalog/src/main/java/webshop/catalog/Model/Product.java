@@ -17,7 +17,7 @@ public class Product   {
   private String detail;
   private BigDecimal price;
   private Category category;
-  private Long categoryId;
+  private Long categoryID;
 
   public Product () {}
   
@@ -32,7 +32,7 @@ public class Product   {
         this.name = name;
         this.price = price;
         this.detail = detail;
-        this.categoryId = categoryID;
+        this.categoryID = categoryID;
         this.category = new Category(categoryID, null);
     }
 
@@ -40,14 +40,14 @@ public class Product   {
 	return id;
   }
 
-public Long getCategoryId() {
+public Long getCategoryID() {
 	// TODO Auto-generated method stub
-	return categoryId;
+	return categoryID;
 }
 
-public void setCategoryId(@NotNull @Valid Long categoryID2) {
+public void setCategoryID(@NotNull @Valid Long categoryID) {
 	// TODO Auto-generated method stub
-	this.categoryId = categoryID2;
+	this.categoryID = categoryID;
 }
 
 public void setPrice(@NotNull @Valid BigDecimal price2) {

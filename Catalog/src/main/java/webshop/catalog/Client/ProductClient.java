@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -67,22 +68,10 @@ public class ProductClient extends BaseClient {
 	@HystrixCommand(fallbackMethod = "createProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean createProduct(Product payload) {
-
-		Map<String, String> params = new HashMap<>();
-		params.put("name", payload.getName());
-		params.put("detail", payload.getDetail());
-		params.put("price", ""+payload.getPrice());
-		params.put("categoryId", ""+payload.getCategoryId());
-
-		String url = "http://"+host+"/products";
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			builder.queryParam(entry.getKey(), entry.getValue());
-		}
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", "application/json");
-		HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, new HttpEntity(headers), String.class);
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(payload, headers);
+		HttpEntity<String> response = restTemplate.exchange("http://"+host+"/products", HttpMethod.POST, request, String.class);
 		return true;
 	}
 	
@@ -90,23 +79,10 @@ public class ProductClient extends BaseClient {
 	@HystrixCommand(fallbackMethod = "updateProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean updateProduct(Long productId, Product payload) {
-
-		Map<String, String> params = new HashMap<>();
-		params.put("name", payload.getName());
-		params.put("detail", payload.getDetail());
-		params.put("price", ""+payload.getPrice());
-		params.put("categoryId", ""+payload.getCategoryId());
-
-		String url = "http://"+host+"/products/"+productId;
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			builder.queryParam(entry.getKey(), entry.getValue());
-		}
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", "application/json");
-		HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, new HttpEntity(headers), String.class);
-
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(payload, headers);
+		restTemplate.put("http://"+host+"/products/"+productId, request, String.class);
 		return true;
 	}
 	
