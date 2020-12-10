@@ -2,10 +2,13 @@ server:
   port: 8085
 spring:
   application:
-    name: catalog 
-eureka:  client:    service-url:
+    name: catalog
+eureka:
+  client:
+    service-url:
       default-zone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 5
-    metadata-map:      instance-id: "${spring.application.name}:${random.value}"
+    metadata-map:
+      instance-id: "${spring.application.name}:${random.value}"

@@ -7,7 +7,6 @@ eureka:  instance:
     health-check-url-path: /health
     
 zuul:
-  ignored-services: '*'
+  ignoredServices: '*'
   routes:
-    user-proxy: /user-api/**
-    #Todo: öffentliche api proxies bereitstellen 
+    catalog: /api-service/**

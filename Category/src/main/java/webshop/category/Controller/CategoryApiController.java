@@ -27,22 +27,30 @@ public class CategoryApiController {
 
     @PostMapping("/categories")
     public ResponseEntity<Boolean> createCategory(
-            @NotNull @ApiParam(value = "Category name", required = true) @Valid @RequestParam(value = "name", required = true) String name
+            @ApiParam(value = "New product." ,required=true ) @RequestBody Category newCategory
     ) {
-        Category newCategory = new Category(name);
         categoryRepository.save(newCategory);
         return new ResponseEntity(true, HttpStatus.OK);
+    }
+
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<Category> fetchCategory(@PathVariable("id") Long id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (optionalCategory.isPresent()) {
+            return new ResponseEntity(optionalCategory.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/categories/{id}")
     public ResponseEntity<Boolean> updateCategory(
             @PathVariable("id") Long id,
-            @NotNull @ApiParam(value = "Category name", required = true) @Valid @RequestParam(value = "name", required = true) String name
+            @ApiParam(value = "New product." ,required=true ) @RequestBody Category newCategory
     ) {
         Optional<Category> optinalCategory = categoryRepository.findById(id);
         if (optinalCategory.isPresent()) {
             Category category = optinalCategory.get();
-            category.setName(name);
+            category.setName(newCategory.getName());
             categoryRepository.save(category);
             return new ResponseEntity(true, HttpStatus.OK);
         }

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>Category</artifactId>
+	<artifactId>category-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Category</name>
+	<name>category-service</name>
 	<description>Category Core Service</description>
 
 	<properties>

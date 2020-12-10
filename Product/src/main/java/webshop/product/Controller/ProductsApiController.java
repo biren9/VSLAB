@@ -2,6 +2,7 @@ package webshop.product.Controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,15 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.*;
 import webshop.product.Model.Product;
@@ -47,25 +40,15 @@ public class ProductsApiController {
     
     @PostMapping("/products")
     public ResponseEntity<Boolean> addProduct(
-    		@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
-    		@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
-    		@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Integer categoryId) {
-        
-        try {
-            Boolean productExists = !productRepo.findByName(name).isEmpty();
-            if (productExists) {
-                return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.NOT_ACCEPTABLE);
-            }
-        	Product newProduct = new Product (name, detail, price);
-            productRepo.save(newProduct);
-            return new ResponseEntity<Boolean>(HttpStatus.ACCEPTED);
-            
-        } catch (IOException e) {
-            log.error("Couldn't serialize response for content type application/json", e);
-            return new ResponseEntity<Boolean>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    		@ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct) {
 
+            Boolean productExists = !productRepo.findByName(newProduct.getName()).isEmpty();
+            if (productExists) {
+                return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            productRepo.save(newProduct);
+            return new ResponseEntity<Boolean>(true, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/products/{id}")
@@ -83,8 +66,29 @@ public class ProductsApiController {
         } 		
     }
 
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> exactProduct(
+            @NotNull @ApiParam(value = "Contains", required = false) @Valid @RequestParam(value = "contains", required = false) String contains,
+            @NotNull @ApiParam(value = "minPrice", required = false) @Valid @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
+            @NotNull @ApiParam(value = "maxPrice", required = false) @Valid @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice
+    ) {
+
+        if (contains == null) {
+            contains = "";
+        }
+        if (minPrice == null) {
+            minPrice = BigDecimal.valueOf(Double.MIN_VALUE);
+        }
+        if (maxPrice == null) {
+            maxPrice = BigDecimal.valueOf(Double.MAX_VALUE);
+        }
+
+        List<Product> allProducts = productRepo.findByNameContainingAndPriceBetween(contains, minPrice, maxPrice);
+        return new ResponseEntity<List<Product>>(allProducts, HttpStatus.OK);
+    }
+
     @GetMapping("/products/{id}")
-    public ResponseEntity<Product> exactProduct(@ApiParam(value = "product Id",required=true) @PathVariable("id") Integer id) {    	
+    public ResponseEntity<Product> exactProducts(@ApiParam(value = "product Id",required=true) @PathVariable("id") Integer id) {
     	try {
     		Product product = productRepo.findById(id).orElse(null);
     		if (product == null) {
@@ -101,18 +105,16 @@ public class ProductsApiController {
     @PutMapping("/products/{id}")
     public ResponseEntity<Boolean> updateProduct(
     		@ApiParam(value = "product Id",required=true) @PathVariable("id") Integer id,
-    		@NotNull @ApiParam(value = "Product name", required = true) @Valid @RequestParam(value = "name", required = true) String name,
-    		@NotNull @ApiParam(value = "Product detail", required = true) @Valid @RequestParam(value = "detail", required = true) String detail,
-    		@NotNull @ApiParam(value = "Product price", required = true) @Valid @RequestParam(value = "price", required = true) BigDecimal price,
-    		@NotNull @ApiParam(value = "Category Id", required = true) @Valid @RequestParam(value = "categoryId", required = true) Integer categoryId) {
+    		@ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct) {
     	try {
     		Product product = productRepo.findById(id).orElse(null);
     		if (product == null) {
                  return new ResponseEntity<Boolean>(objectMapper.readValue("false", Boolean.class), HttpStatus.NOT_ACCEPTABLE);
              }
-             product.setName(name);
-             product.setDetail(detail);
-             product.setPrice(price);
+             product.setName(newProduct.getName());
+             product.setDetail(newProduct.getDetail());
+             product.setPrice(newProduct.getPrice());
+             product.setCategoryId(newProduct.getCategoryID());
              productRepo.save(product);
              return new ResponseEntity<Boolean>(HttpStatus.OK);    		
     	} catch (IOException e) {
