@@ -24,7 +24,7 @@ import webshop.catalog.Model.*;
 public class ProductClient extends BaseClient {
 
 	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
-
+	private String host = "localhost:8083"; // product-service
 	private RestTemplate restTemplate = restTemplate();
 
 	//get all Products/ filter Products
@@ -42,7 +42,7 @@ public class ProductClient extends BaseClient {
 			maxPrice = Double.MAX_VALUE;
 		}
 
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://product-service/products/")
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://"+host+"/products/")
 				.queryParam("searchString", searchStr).queryParam("minPrice", minPrice)
 				.queryParam("maxPrice", maxPrice);
 
@@ -58,7 +58,7 @@ public class ProductClient extends BaseClient {
 	@HystrixCommand(fallbackMethod = "getProductCache", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Product getProduct(Long productId) {
-		Product tmp = restTemplate.getForObject("http://product-service/products/" + productId, Product.class);
+		Product tmp = restTemplate.getForObject("http://"+host+"/products/" + productId, Product.class);
 		productCache.putIfAbsent(productId, tmp);
 		return tmp;
 	}
@@ -67,7 +67,7 @@ public class ProductClient extends BaseClient {
 	@HystrixCommand(fallbackMethod = "createProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean createProduct(Product payload) {
-		restTemplate.postForObject("http://product-service/products", payload, Product.class);
+		restTemplate.postForObject("http://"+host+"/products", payload, Product.class);
 		return true;
 	}
 	
@@ -75,14 +75,14 @@ public class ProductClient extends BaseClient {
 	@HystrixCommand(fallbackMethod = "updateProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean updateProduct(Long productId, Product payload) {
-		restTemplate.put("http://product-service/products/" + productId, payload);
+		restTemplate.put("http://"+host+"/products/" + productId, payload);
 		return true;
 	}
 	
 	@HystrixCommand(fallbackMethod = "deleteProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean deleteProduct(Long productId) {
-		restTemplate.delete("http://product-service/products/" + productId);
+		restTemplate.delete("http://"+host+"/products/" + productId);
 		return true;
 	}
 

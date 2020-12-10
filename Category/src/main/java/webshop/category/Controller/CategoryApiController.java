@@ -34,6 +34,15 @@ public class CategoryApiController {
         return new ResponseEntity(true, HttpStatus.OK);
     }
 
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<Category> fetchCategory(@PathVariable("id") Long id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (optionalCategory.isPresent()) {
+            return new ResponseEntity(optionalCategory.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+    }
+
     @PutMapping("/categories/{id}")
     public ResponseEntity<Boolean> updateCategory(
             @PathVariable("id") Long id,

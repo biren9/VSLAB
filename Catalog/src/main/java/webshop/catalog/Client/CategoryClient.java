@@ -23,7 +23,7 @@ import webshop.catalog.Model.Category;
 public class CategoryClient extends BaseClient {
 
     private final Map<Long, Category> categoryCache = new LinkedHashMap<>();
-
+    private String host = "localhost:8084"; // category-service
     private RestTemplate categoryRestTemplate = restTemplate();
 
     // Fetch all categories and replace the current cache with the new result.
@@ -31,7 +31,7 @@ public class CategoryClient extends BaseClient {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Iterable<Category> getCategories() {
         Collection<Category> categories = new HashSet<>();
-        Category[] tmpCategories = categoryRestTemplate.getForObject("http://category-service/categories", Category[].class);
+        Category[] tmpCategories = categoryRestTemplate.getForObject("http://"+host+"/categories", Category[].class);
         Collections.addAll(categories, tmpCategories);
         categoryCache.clear();
         categories.forEach(u -> categoryCache.put(u.getId(), u));
@@ -43,7 +43,7 @@ public class CategoryClient extends BaseClient {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Iterable<Category> getCategories(String name) {
         Collection<Category> categories = new HashSet<>();
-        Category[] tmpCategories = categoryRestTemplate.getForObject("http://category-service/categories?name=" + name, Category[].class);
+        Category[] tmpCategories = categoryRestTemplate.getForObject("http://"+host+"/categories?name=" + name, Category[].class);
         Collections.addAll(categories, tmpCategories);
         return categories;
     }
@@ -55,7 +55,7 @@ public class CategoryClient extends BaseClient {
         if (categoryId == null) {
             return null;
         }
-        return categoryRestTemplate.getForObject("http://category-service/categories/" + categoryId, Category.class);
+        return categoryRestTemplate.getForObject("http://"+host+"/categories/" + categoryId, Category.class);
     }
 
 
@@ -63,7 +63,7 @@ public class CategoryClient extends BaseClient {
     @HystrixCommand(fallbackMethod = "createCategoryFallback", commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Boolean createCategory(Category payload) {
-        categoryRestTemplate.postForObject("http://category-service/categories", payload, Category.class);
+        categoryRestTemplate.postForObject("http://"+host+"/categories", payload, Category.class);
         return true;
     }
 
@@ -71,7 +71,7 @@ public class CategoryClient extends BaseClient {
     @HystrixCommand(fallbackMethod = "updateCategoryFallback", commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Boolean updateCategory(Long categoryId, Category payload) {
-        categoryRestTemplate.put("http://category-service/categories/" + categoryId, payload);
+        categoryRestTemplate.put("http://"+host+"/categories/" + categoryId, payload);
         return true;
     }
 
@@ -79,7 +79,7 @@ public class CategoryClient extends BaseClient {
     @HystrixCommand(fallbackMethod = "deleteCategoryFallback", commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Boolean deleteCategory(Long categoryId) {
-        categoryRestTemplate.delete("http://category-service/categories/" + categoryId);
+        categoryRestTemplate.delete("http://"+host+"/categories/" + categoryId);
         return true;
     }
 
