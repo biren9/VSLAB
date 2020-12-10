@@ -90,7 +90,23 @@ public class ProductClient extends BaseClient {
 	@HystrixCommand(fallbackMethod = "updateProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean updateProduct(Long productId, Product payload) {
-		restTemplate.put("http://"+host+"/products/" + productId, payload);
+
+		Map<String, String> params = new HashMap<>();
+		params.put("name", payload.getName());
+		params.put("detail", payload.getDetail());
+		params.put("price", ""+payload.getPrice());
+		params.put("categoryId", ""+payload.getCategoryId());
+
+		String url = "http://"+host+"/products/"+productId;
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			builder.queryParam(entry.getKey(), entry.getValue());
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Accept", "application/json");
+		HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, new HttpEntity(headers), String.class);
+
 		return true;
 	}
 	
