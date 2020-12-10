@@ -67,8 +67,24 @@ public class ProductsApiController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> exactProduct() {
-        return new ResponseEntity<List<Product>>(productRepo.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Product>> exactProduct(
+            @NotNull @ApiParam(value = "Contains", required = false) @Valid @RequestParam(value = "contains", required = false) String contains,
+            @NotNull @ApiParam(value = "minPrice", required = false) @Valid @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
+            @NotNull @ApiParam(value = "maxPrice", required = false) @Valid @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice
+    ) {
+
+        if (contains == null) {
+            contains = "";
+        }
+        if (minPrice == null) {
+            minPrice = BigDecimal.valueOf(Double.MIN_VALUE);
+        }
+        if (maxPrice == null) {
+            maxPrice = BigDecimal.valueOf(Double.MAX_VALUE);
+        }
+
+        List<Product> allProducts = productRepo.findByNameContainingAndPriceBetween(contains, minPrice, maxPrice);
+        return new ResponseEntity<List<Product>>(allProducts, HttpStatus.OK);
     }
 
     @GetMapping("/products/{id}")

@@ -1,5 +1,6 @@
 package webshop.product.repository;
  
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -10,6 +11,6 @@ import webshop.product.Model.Product;
  
 public interface ProductsRepository extends JpaRepository<Product, Integer> {
 
-	List<Product> findByName(String name);
- 
+	public List<Product> findByName(String name);
+	public List<Product> findByNameContainingAndPriceBetween(String name, BigDecimal min, BigDecimal max);
 }
