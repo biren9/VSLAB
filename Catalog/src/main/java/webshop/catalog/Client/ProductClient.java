@@ -22,11 +22,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import webshop.catalog.Model.*;
 
 @Component
-public class ProductClient extends BaseClient {
+public class ProductClient { // extends BaseClient
 
 	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
-	private String host = "localhost:8083"; // product-service
-	private RestTemplate restTemplate = restTemplate();
+	private String host = "product-service"; // product-service
+	@Autowired
+	private RestTemplate restTemplate; // = restTemplate();
 
 	//get all Products/ filter Products
 	@HystrixCommand(fallbackMethod = "getProductsCache", commandProperties = {
@@ -98,6 +99,10 @@ public class ProductClient extends BaseClient {
 
 	
 	//Fallback-Methods
+	public Iterable<Product> getProductsCache(String searchStr, Double minPrice, Double maxPrice) {
+		return productCache.values();
+	}
+
 	public Iterable<Product> getProductsCache(Integer productId) {
 		return productCache.values();
 	}

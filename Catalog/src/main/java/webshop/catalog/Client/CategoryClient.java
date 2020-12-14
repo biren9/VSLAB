@@ -20,11 +20,12 @@ import org.springframework.web.client.RestTemplate;
 import webshop.catalog.Model.Category;
 
 @Component
-public class CategoryClient extends BaseClient {
+public class CategoryClient { // extends BaseClient
 
     private final Map<Long, Category> categoryCache = new LinkedHashMap<>();
-    private String host = "localhost:8084"; // category-service
-    private RestTemplate categoryRestTemplate = restTemplate();
+    private String host = "category-service"; // category-service
+    @Autowired
+    private RestTemplate categoryRestTemplate; // = restTemplate();
 
     // Fetch all categories and replace the current cache with the new result.
     @HystrixCommand(fallbackMethod = "getCategoriesCache", commandProperties = {

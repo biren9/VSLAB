@@ -1,5 +1,6 @@
 package webshop.catalog.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,10 @@ import java.util.List;
 @RestController()
 class CatalogController {
 
-    private ProductClient productClient = new ProductClient();
-    private CategoryClient categoryClient = new CategoryClient();
+    @Autowired
+    private ProductClient productClient;
+    @Autowired
+    private CategoryClient categoryClient;
 
     @GetMapping("/catalog/products")
     public ResponseEntity<List<Product>> fetchCatalog(
