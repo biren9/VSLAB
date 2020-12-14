@@ -14,7 +14,7 @@ services:
       - "1234:8080" # Forward the exposed port 8080 on the container to port 1234 on the host machine
     restart: always
     depends_on:
-      - eureka
+      - discovery
       - category-db # This service depends on mysql. Start that first.
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - backend
@@ -27,7 +27,7 @@ services:
       - "1235:8080"
     restart: always
     depends_on:
-      - eureka
+      - discovery
       - product-db
     networks:
       - backend
@@ -40,7 +40,7 @@ services:
       - "1236:8080"
     restart: always
     depends_on:
-      - eureka
+      - discovery
       - user-db
     networks:
       - backend
@@ -55,7 +55,7 @@ services:
     networks:
       - backend
     depends_on:
-      - eureka
+      - discovery
       - category
       - product
 
@@ -64,18 +64,18 @@ services:
       context: Zuul
       dockerfile: DOCKERFILE
     ports:
-      - "8081"
+      - "9001:8081"
     depends_on:
-      - eureka
+      - discovery
     networks:
       - backend
 
-  eureka:
+  discovery:
     build:
       context: eureka
       dockerfile: DOCKERFILE
     ports:
-      - "8761"
+      - "9900:8761"
     networks:
       - backend
 
@@ -91,7 +91,7 @@ services:
       MYSQL_PASSWORD: test
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - db-data-categories:/var/lib/mysql
+      - db-data-category:/var/lib/mysql
     networks:
       - backend
 
@@ -106,7 +106,7 @@ services:
       MYSQL_PASSWORD: test
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - db-data-products:/var/lib/mysql
+      - db-data-product:/var/lib/mysql
     networks:
       - backend
 
@@ -121,15 +121,15 @@ services:
       MYSQL_PASSWORD: test
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - db-data-users:/var/lib/mysql
+      - db-data-user:/var/lib/mysql
     networks:
       - backend
 
 # Volumes
 volumes:
-  db-data-categories:
-  db-data-products:
-  db-data-users:
+  db-data-category:
+  db-data-product:
+  db-data-user:
 
 # Networks to be created to facilitate communication between containers
 networks:
