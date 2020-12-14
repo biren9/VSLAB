@@ -1,3 +1,6 @@
 Category/.idea
 *.class
 *.lst
+Category/target/classes/META-INF/maven/com.example/category-service/pom.properties
+Category/target/classes/META-INF/MANIFEST.MF
+Category/target/classes/META-INF/maven/com.example/category-service/pom.xml

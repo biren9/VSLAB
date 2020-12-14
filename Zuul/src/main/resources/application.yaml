@@ -10,3 +10,7 @@ zuul:
   ignoredServices: '*'
   routes:
     catalog: /api-service/**
+
+hystrix:
+  dashboard:
+    proxy-stream-allow-list: "*"

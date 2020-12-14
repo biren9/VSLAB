@@ -25,9 +25,9 @@ import webshop.catalog.Model.*;
 public class ProductClient { // extends BaseClient
 
 	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
-	private String host = "product-service"; // product-service
+	private String host = "product-service";
 	@Autowired
-	private RestTemplate restTemplate; // = restTemplate();
+	private RestTemplate restTemplate;
 
 	//get all Products/ filter Products
 	@HystrixCommand(fallbackMethod = "getProductsCache", commandProperties = {
