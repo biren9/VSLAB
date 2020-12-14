@@ -111,16 +111,14 @@ public class ProductClient { // extends BaseClient
 		return productCache.getOrDefault(productId, new Product());
 	}
 	
-	public Product createProductFallback(Product payload){
-		return payload;
+	public Boolean createProductFallback(Product payload){ return false; }
+
+	public Boolean updateProductFallback(Long productId, Product payload){
+		return false;
 	}
 
-	public Product updateProductFallback(Long productId, Product payload){
-		return payload;
-	}
-
-	public Long deleteProductFallback(Long productId){
-		return productId;
+	public Boolean deleteProductFallback(Long productId){
+		return false;
 	}
 	
 	
