@@ -1,137 +1,162 @@
 # Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
 
-version: "3.8"
+version: '3.8'
 
 # Define services
 services:
-  # App backend service
-  category:
-    # Configuration for building the docker image for the backend service
-    build:
-      context: Category # Use an image built from the specified dockerfile in the `Category` directory.
-      dockerfile: DOCKERFILE
-    ports:
-      - "1234:8080" # Forward the exposed port 8080 on the container to port 1234 on the host machine
-    restart: always
-    depends_on:
-      - discovery
-      - category-db # This service depends on mysql. Start that first.
-    networks: # Networks to join (Services on the same network can communicate with each other using their name)
-      - backend
+   # App backend service
+   category:
+      # Configuration for building the docker image for the backend service
+      build:
+         context: Category # Use an image built from the specified dockerfile in the `Category` directory.
+         dockerfile: DOCKERFILE
+      environment:
+         # Important for clients to register with eureka
+         - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      ports:
+         - '1234:8080' # Forward the exposed port 8080 on the container to port 1234 on the host machine
+      links:
+         - discovery
+      restart: always
+      depends_on:
+         - discovery
+         - category-db # This service depends on mysql. Start that first.
+      networks: # Networks to join (Services on the same network can communicate with each other using their name)
+         - backend
 
-  product:
-    build:
-      context: Product
-      dockerfile: DOCKERFILE
-    ports:
-      - "1235:8080"
-    restart: always
-    depends_on:
-      - discovery
-      - product-db
-    networks:
-      - backend
+   product:
+      build:
+         context: Product
+         dockerfile: DOCKERFILE
+      environment:
+         # Important for clients to register with eureka
+         - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      ports:
+         - '1235:8080'
+      links:
+         - discovery
+      restart: always
+      depends_on:
+         - discovery
+         - product-db
+      networks:
+         - backend
 
-  user:
-    build:
-      context: User
-      dockerfile: DOCKERFILE
-    ports:
-      - "1236:8080"
-    restart: always
-    depends_on:
-      - discovery
-      - user-db
-    networks:
-      - backend
+   user:
+      build:
+         context: User
+         dockerfile: DOCKERFILE
+      environment:
+         # Important for clients to register with eureka
+         - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      ports:
+         - '1236:8080'
+      links:
+         - discovery
+      restart: always
+      depends_on:
+         - discovery
+         - user-db
+      networks:
+         - backend
 
-  catalog:
-    build:
-      context: Catalog
-      dockerfile: DOCKERFILE
-    ports:
-      - "1237:8080"
-    restart: always
-    networks:
-      - backend
-    depends_on:
-      - discovery
-      - category
-      - product
+   catalog:
+      build:
+         context: Catalog
+         dockerfile: DOCKERFILE
+      environment:
+         # Important for clients to register with eureka
+         - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      ports:
+         - '1237:8080'
+      links:
+         - discovery
+      restart: always
+      networks:
+         - backend
+      depends_on:
+         - discovery
+         - category
+         - product
 
-  zuul:
-    build:
-      context: Zuul
-      dockerfile: DOCKERFILE
-    ports:
-      - "9001:8080"
-    depends_on:
-      - discovery
-    networks:
-      - backend
+   zuul:
+      build:
+         context: Zuul
+         dockerfile: DOCKERFILE
+      environment:
+         # Important for clients to register with eureka
+         - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
+      ports:
+         - '9001:8080'
+      links:
+         - discovery
+      depends_on:
+         - discovery
+      networks:
+         - backend
 
-  discovery:
-    build:
-      context: eureka
-      dockerfile: DOCKERFILE
-    ports:
-      - "9900:8761"
-    networks:
-      - backend
+   discovery:
+      build:
+         context: eureka
+         dockerfile: DOCKERFILE
+      ports:
+         - '9900:8761'
+      networks:
+         - backend
 
-  # Database Service (Mysql)
-  category-db:
-    image: mysql:5.7
-    ports:
-      - "3306"
-    restart: always
-    environment:
-      MYSQL_DATABASE: category
-      MYSQL_USER: vs
-      MYSQL_PASSWORD: test
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - db-data-category:/var/lib/mysql
-    networks:
-      - backend
+   # Database Service (Mysql)
+   category-db:
+      image: mysql:5.7
+      ports:
+         - '3306'
+      restart: always
+      environment:
+         MYSQL_DATABASE: category
+         MYSQL_USER: vs
+         MYSQL_PASSWORD: test
+         MYSQL_ROOT_PASSWORD: root
+      volumes:
+         - db-data-category:/var/lib/mysql
+      networks:
+         - backend
 
-  product-db:
-    image: mysql:5.7
-    ports:
-      - "3306"
-    restart: always
-    environment:
-      MYSQL_DATABASE: product
-      MYSQL_USER: vs
-      MYSQL_PASSWORD: test
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - db-data-product:/var/lib/mysql
-    networks:
-      - backend
+   product-db:
+      image: mysql:5.7
+      ports:
+         - '3306'
+      restart: always
+      environment:
+         MYSQL_DATABASE: product
+         MYSQL_USER: vs
+         MYSQL_PASSWORD: test
+         MYSQL_ROOT_PASSWORD: root
+      volumes:
+         - db-data-product:/var/lib/mysql
+      networks:
+         - backend
 
-  user-db:
-    image: mysql:5.7
-    ports:
-      - "3306"
-    restart: always
-    environment:
-      MYSQL_DATABASE: user
-      MYSQL_USER: vs
-      MYSQL_PASSWORD: test
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - db-data-user:/var/lib/mysql
-    networks:
-      - backend
+   user-db:
+      image: mysql:5.7
+      ports:
+         - '3306'
+      restart: always
+      environment:
+         MYSQL_DATABASE: user
+         MYSQL_USER: vs
+         MYSQL_PASSWORD: test
+         MYSQL_ROOT_PASSWORD: root
+      volumes:
+         - db-data-user:/var/lib/mysql
+      networks:
+         - backend
 
 # Volumes
 volumes:
-  db-data-category:
-  db-data-product:
-  db-data-user:
+   db-data-category:
+   db-data-product:
+   db-data-user:
 
 # Networks to be created to facilitate communication between containers
 networks:
-  backend:
-    driver: bridge
+   backend:
+      driver: bridge
