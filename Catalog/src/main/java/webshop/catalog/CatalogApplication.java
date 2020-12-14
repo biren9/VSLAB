@@ -11,7 +11,7 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 @EnableDiscoveryClient
 @EnableCircuitBreaker
 @EnableHystrix
-@RibbonClient("catalog")
+@RibbonClient("Catalog")
 public class CatalogApplication {
 
 	public static void main(String[] args) {
