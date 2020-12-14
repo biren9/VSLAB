@@ -1,15 +1,15 @@
 # Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
 
-version: "3.7"
+version: "3.8"
 
 # Define services
 services:
   # App backend service
-  Category:
+  category:
     # Configuration for building the docker image for the backend service
     build:
       context: Category # Use an image built from the specified dockerfile in the `Category` directory.
-      dockerfile: Dockerfile
+      dockerfile: DOCKERFILE
     ports:
       - "1234:8080" # Forward the exposed port 8080 on the container to port 1234 on the host machine
     restart: always
@@ -18,10 +18,10 @@ services:
     networks: # Networks to join (Services on the same network can communicate with each other using their name)
       - backend
 
-  Product:
+  product:
     build:
       context: Product
-      dockerfile: Dockerfile
+      dockerfile: DOCKERFILE
     ports:
       - "1235:8080"
     restart: always
@@ -30,10 +30,10 @@ services:
     networks:
       - backend
 
-  User:
+  user:
     build:
       context: User
-      dockerfile: Dockerfile
+      dockerfile: DOCKERFILE
     ports:
       - "1236:8080"
     restart: always
@@ -42,23 +42,23 @@ services:
     networks:
       - backend
 
-  Catalog:
+  catalog:
     build:
       context: Catalog
-      dockerfile: Dockerfile
+      dockerfile: DOCKERFILE
     ports:
       - "1237:8080"
     restart: always
     networks:
       - backend
     depends_on:
-      - Category
-      - Product
+      - category
+      - product
 
-  Zuul:
+  zuul:
     build:
-      context: ./Zuul
-      dockerfile: Dockerfile
+      context: Zuul
+      dockerfile: DOCKERFILE
     ports:
       - "8081:8081"
     networks:
@@ -98,7 +98,7 @@ services:
   user-db:
     image: mysql:5.7
     ports:
-      - "3306:3306"
+      - "3306"
     restart: always
     environment:
       MYSQL_DATABASE: user
@@ -119,6 +119,4 @@ volumes:
 # Networks to be created to facilitate communication between containers
 networks:
   backend:
-    driver: bridge
-  client-network:
     driver: bridge
