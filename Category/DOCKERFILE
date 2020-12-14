@@ -1,5 +1,5 @@
 #### Stage 1: Build the application
-FROM openjdk:11 as build
+FROM adoptopenjdk/openjdk11:alpine as build
 
 # Set the current working directory inside the image
 WORKDIR /app
@@ -34,4 +34,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","de.hska.iwi.vslab.categoryservice.CategoryServiceApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","webshop.category.CategoryApplication"]

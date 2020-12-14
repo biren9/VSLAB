@@ -64,6 +64,15 @@ services:
     networks:
       - backend
 
+  eureka:
+    build:
+      context: eureka
+      dockerfile: DOCKERFILE
+    ports:
+      - "8761:8761"
+    networks:
+      - backend
+
   # Database Service (Mysql)
   category-db:
     image: mysql:5.7
