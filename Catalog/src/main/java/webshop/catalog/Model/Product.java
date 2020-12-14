@@ -6,11 +6,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-
-import lombok.Data;
 import org.springframework.validation.annotation.Validated;
 
-@Data
 public class Product   {
   private Long id;
   private String name;
@@ -50,10 +47,21 @@ public void setCategoryID(@NotNull @Valid Long categoryID) {
 	this.categoryID = categoryID;
 }
 
-public void setPrice(@NotNull @Valid BigDecimal price2) {
-	// TODO Auto-generated method stub
-	this.price = price2;
-}
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setPrice(@NotNull @Valid BigDecimal price2) {
+	    this.price = price2;
+    }
 
 public void setDetail(@NotNull @Valid String detail2) {
 	// TODO Auto-generated method stub
