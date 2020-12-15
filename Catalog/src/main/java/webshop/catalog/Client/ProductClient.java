@@ -73,7 +73,7 @@ public class ProductClient { // extends BaseClient
 		headers.set("Accept", "application/json");
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(payload, headers);
 		HttpEntity<String> response = restTemplate.exchange("http://"+host+"/products", HttpMethod.POST, request, String.class);
-		// TODO: update cache
+		productCache.put(payload.getId(), payload);
 		return true;
 	}
 	
@@ -85,7 +85,7 @@ public class ProductClient { // extends BaseClient
 		headers.set("Accept", "application/json");
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(payload, headers);
 		restTemplate.put("http://"+host+"/products/"+productId, request, String.class);
-		// TODO: update cache
+		productCache.put(productId, payload);
 		return true;
 	}
 	
@@ -93,7 +93,7 @@ public class ProductClient { // extends BaseClient
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean deleteProduct(Long productId) {
 		restTemplate.delete("http://"+host+"/products/" + productId);
-		// TODO: update cache
+		productCache.put(productId, null);
 		return true;
 	}
 

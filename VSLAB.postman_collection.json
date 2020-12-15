@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "5d855962-2fe3-4ac6-b749-13f748f12399",
+		"name": "VSLAB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Catalog get Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9001/catalog-service/catalog/products",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"catalog-service",
+						"catalog",
+						"products"
+					],
+					"query": [
+						{
+							"key": "contains",
+							"value": "Zwei",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Catalog create new Product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"new product 3\", \n    \"detail\": \"test\", \n    \"price\": 9,  \n    \"categoryID\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9001/catalog-service/catalog/products",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"catalog-service",
+						"catalog",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Categories get ",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9001/category-service/categories",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"category-service",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Category Create new",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"neue Category\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9001/category-service/categories",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"category-service",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Category update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"neue Category update\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9001/category-service/categories/1",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"category-service",
+						"categories",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Catalog update Product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"new product with updated name\", \n    \"detail\": \"test\", \n    \"price\": 9,  \n    \"categoryID\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9001/catalog-service/catalog/products/1",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"catalog-service",
+						"catalog",
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Catalog delete Category",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9001/catalog-service/catalog/categories/2",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"catalog-service",
+						"catalog",
+						"categories",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
