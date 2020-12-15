@@ -62,6 +62,57 @@
 			"response": []
 		},
 		{
+			"name": "Catalog update Product",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"new product with updated name\", \n    \"detail\": \"test\", \n    \"price\": 9,  \n    \"categoryID\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9001/catalog-service/catalog/products/1",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"catalog-service",
+						"catalog",
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Catalog delete Category",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9001/catalog-service/catalog/categories/2",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"catalog-service",
+						"catalog",
+						"categories",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Categories get ",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -144,57 +195,6 @@
 						"category-service",
 						"categories",
 						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Catalog update Product",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"new product with updated name\", \n    \"detail\": \"test\", \n    \"price\": 9,  \n    \"categoryID\": 1\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:9001/catalog-service/catalog/products/1",
-					"host": [
-						"localhost"
-					],
-					"port": "9001",
-					"path": [
-						"catalog-service",
-						"catalog",
-						"products",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Catalog delete Category",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "localhost:9001/catalog-service/catalog/categories/2",
-					"host": [
-						"localhost"
-					],
-					"port": "9001",
-					"path": [
-						"catalog-service",
-						"catalog",
-						"categories",
-						"2"
 					]
 				}
 			},
