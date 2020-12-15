@@ -1,5 +1,3 @@
-server:
-  port: 8083
 spring:
   application:
     name: product-service
@@ -11,12 +9,15 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/product
+    url: jdbc:mysql://product-db:3306/product
     username: vs
     password: test
-eureka:  client:    service-url:
+eureka:
+  client:
+    service-url:
       default-zone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
     lease-renewal-interval-in-seconds: 5
-    metadata-map:      instance-id: "${spring.application.name}:${random.value}"
+    metadata-map:
+      instance-id: "${spring.application.name}:${random.value}"

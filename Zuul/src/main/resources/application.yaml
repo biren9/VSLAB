@@ -1,7 +1,5 @@
-server:
-  port: 8081
-  
-eureka:  instance:
+eureka:
+  instance:
     lease-renewal-interval-in-seconds: 10
     status-page-url-path: /info
     health-check-url-path: /health
@@ -9,7 +7,10 @@ eureka:  instance:
 zuul:
   ignoredServices: '*'
   routes:
-    catalog: /api-service/**
+    catalog: /catalog-service/**
+    product-service: /product-service/**
+    category-service: /category-service/**
+    User: /user-service/**
 
 hystrix:
   dashboard:

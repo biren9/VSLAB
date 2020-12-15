@@ -1,5 +1,3 @@
-server:
-  port: 8082
 spring:
   application:
     name: User
@@ -10,7 +8,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
   datasource:
-    url: jdbc:mysql://localhost:3306/user
+    url: jdbc:mysql://user-db:3306/user
     username: vs
     password: test
 eureka:

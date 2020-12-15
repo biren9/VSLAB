@@ -1,5 +1,3 @@
-server:
-  port: 8084
 spring:
   application:
     name: category-service
@@ -10,7 +8,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
   datasource:
-    url: jdbc:mysql://localhost:3306/category
+    url: jdbc:mysql://category-db:3306/category
     username: vs
     password: test
 eureka:
