@@ -103,11 +103,11 @@ public class ProductClient { // extends BaseClient
 		return productCache.values();
 	}
 
-	public Iterable<Product> getProductsCache(Integer productId) {
+	public Iterable<Product> getProductsCache(Long productId) {
 		return productCache.values();
 	}
 	
-	public Product getProductCache(Integer productId) {
+	public Product getProductCache(Long productId) {
 		return productCache.getOrDefault(productId, new Product());
 	}
 	
