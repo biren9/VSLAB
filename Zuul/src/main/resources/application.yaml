@@ -10,6 +10,7 @@ zuul:
     catalog: /catalog-service/**
     product-service: /product-service/**
     category-service: /category-service/**
+    User: /user-service/**
 
 hystrix:
   dashboard:
