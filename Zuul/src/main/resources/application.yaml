@@ -9,7 +9,7 @@ zuul:
   routes:
     catalog: /catalog-service/**
     product-service: /product-service/**
-    catalog-service: /catalog-service/**
+    category-service: /category-service/**
 
 hystrix:
   dashboard:
