@@ -68,7 +68,7 @@ services:
          # Important for clients to register with eureka
          - eureka.client.serviceUrl.defaultZone=http://discovery:8761/eureka/
       ports:
-         - '1237:8080'
+         - '8080'
       links:
          - discovery
       restart: always
