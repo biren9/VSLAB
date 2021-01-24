@@ -12,6 +12,7 @@ import webshop.catalog.Model.Product;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -108,4 +109,48 @@ class CatalogController {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
     }
+
+    // Product forward
+
+    @DeleteMapping("/catalog/products/{id}")
+    public ResponseEntity<Boolean> deleteProduct(@ApiParam(value = "product Id",required=true) @PathVariable("id") Long id) {
+        if (productClient.deleteProduct(id)) {
+            return new ResponseEntity(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // Category forward
+
+    @GetMapping("/catalog/categories")
+    public ResponseEntity<List<Category>> fetchCategories() {
+        Iterable<Category> categories = categoryClient.getCategories();
+        return new ResponseEntity(categories, HttpStatus.OK);
+    }
+
+    @PostMapping("/catalog/categories")
+    public ResponseEntity<Boolean> createCategory(
+            @ApiParam(value = "New Category." ,required=true ) @RequestBody Category newCategory
+    ) {
+        Boolean success = categoryClient.createCategory(newCategory);
+        if (success) {
+            return new ResponseEntity(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(false, HttpStatus.BAD_GATEWAY);
+        }
+    }
+
+    @PutMapping("/catalog/categories")
+    public ResponseEntity<Boolean> updateCategory(
+            @ApiParam(value = "New Category." ,required=true ) @RequestBody Category newCategory
+    ) {
+        Boolean success = categoryClient.updateCategory(newCategory.getId(), newCategory);
+        if (success) {
+            return new ResponseEntity(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(false, HttpStatus.BAD_GATEWAY);
+        }
+    }
+
 }
