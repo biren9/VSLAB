@@ -24,12 +24,27 @@ class CatalogController {
     @Autowired
     private CategoryClient categoryClient;
 
+    @GetMapping("/catalog/products/{id}")
+    public ResponseEntity<Product> exactProducts(
+            @ApiParam(value = "product Id", required = true) @PathVariable("id") Long id) {
+
+        Product product = productClient.getProduct(id);
+
+        Category category = categoryClient.getCategory(product.getCategoryID());
+        product.setCategory(category);
+
+        if (product == null) {
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity(product, HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/catalog/products")
     public ResponseEntity<List<Product>> fetchCatalog(
             @NotNull @ApiParam(value = "Contains", required = false) @Valid @RequestParam(value = "contains", required = false) String contains,
             @NotNull @ApiParam(value = "minPrice", required = false) @Valid @RequestParam(value = "minPrice", required = false) Double minPrice,
-            @NotNull @ApiParam(value = "maxPrice", required = false) @Valid @RequestParam(value = "maxPrice", required = false) Double maxPrice
-    ) {
+            @NotNull @ApiParam(value = "maxPrice", required = false) @Valid @RequestParam(value = "maxPrice", required = false) Double maxPrice) {
 
         Iterable<Product> products = productClient.getProducts(contains, minPrice, maxPrice);
         for (Product product : products) {
@@ -42,8 +57,7 @@ class CatalogController {
 
     @PostMapping("/catalog/products")
     public ResponseEntity<Boolean> createCatalog(
-            @ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct
-    ) {
+            @ApiParam(value = "New product.", required = true) @RequestBody Product newProduct) {
 
         if (categoryClient.getCategory(newProduct.getCategoryID()) == null) {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
@@ -59,10 +73,8 @@ class CatalogController {
     }
 
     @PutMapping("/catalog/products/{id}")
-    public ResponseEntity<Boolean> updateCategory(
-            @PathVariable("id") Long id,
-            @ApiParam(value = "New product." ,required=true ) @RequestBody Product newProduct
-    ) {
+    public ResponseEntity<Boolean> updateCategory(@PathVariable("id") Long id,
+            @ApiParam(value = "New product.", required = true) @RequestBody Product newProduct) {
         if (categoryClient.getCategory(newProduct.getCategoryID()) == null) {
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         }
@@ -91,7 +103,7 @@ class CatalogController {
         Iterable<Product> products = productClient.getProducts(null, null, null);
         Boolean hasProductWithCurrentCategory = false;
 
-        for (Product product: products) {
+        for (Product product : products) {
             if (product.getCategoryID().equals(id)) {
                 hasProductWithCurrentCategory = true;
                 break;
@@ -113,7 +125,8 @@ class CatalogController {
     // Product forward
 
     @DeleteMapping("/catalog/products/{id}")
-    public ResponseEntity<Boolean> deleteProduct(@ApiParam(value = "product Id",required=true) @PathVariable("id") Long id) {
+    public ResponseEntity<Boolean> deleteProduct(
+            @ApiParam(value = "product Id", required = true) @PathVariable("id") Long id) {
         if (productClient.deleteProduct(id)) {
             return new ResponseEntity(true, HttpStatus.OK);
         } else {
@@ -131,8 +144,7 @@ class CatalogController {
 
     @PostMapping("/catalog/categories")
     public ResponseEntity<Boolean> createCategory(
-            @ApiParam(value = "New Category." ,required=true ) @RequestBody Category newCategory
-    ) {
+            @ApiParam(value = "New Category.", required = true) @RequestBody Category newCategory) {
         Boolean success = categoryClient.createCategory(newCategory);
         if (success) {
             return new ResponseEntity(true, HttpStatus.OK);
@@ -141,11 +153,10 @@ class CatalogController {
         }
     }
 
-    @PutMapping("/catalog/categories")
-    public ResponseEntity<Boolean> updateCategory(
-            @ApiParam(value = "New Category." ,required=true ) @RequestBody Category newCategory
-    ) {
-        Boolean success = categoryClient.updateCategory(newCategory.getId(), newCategory);
+    @PutMapping("/catalog/categories/{id}")
+    public ResponseEntity<Boolean> updateCategory(@PathVariable("id") Long id,
+            @ApiParam(value = "New product.", required = true) @RequestBody Category newCategory) {
+        Boolean success = categoryClient.updateCategory(id, newCategory);
         if (success) {
             return new ResponseEntity(true, HttpStatus.OK);
         } else {
