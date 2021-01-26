@@ -6,10 +6,17 @@ eureka:
 
 zuul:
    ignoredServices: '*'
+   sensitiveHeaders: Cookie,Set-Cookie
    routes:
       catalog: /catalog-service/**
       User: /user-service/**
+      authorization: /authorization-service/**
 
 hystrix:
    dashboard:
       proxy-stream-allow-list: '*'
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://authorization-service:8080/self

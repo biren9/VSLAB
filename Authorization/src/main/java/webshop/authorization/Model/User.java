@@ -1,6 +1,10 @@
 package webshop.authorization.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,33 +14,38 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * This class contains details about a User.
  */
 
 @Entity
-public class User {
+@Table(name = "user")
+public class User implements UserDetails {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @JsonProperty("username")
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @JsonProperty("firstname")
+    @Column(name = "name", nullable = false)
     private String firstname;
 
-    @JsonProperty("lastname")
+    @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @JsonProperty("password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToOne()
-    @JoinColumn(name = "role")
+    @JoinColumn(name = "role", nullable = false)
     private Role role;
 
     public User(String username, String firstname, String lastname, String password, Role role) {
@@ -96,5 +105,40 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        switch (role.getTyp().toLowerCase()) {
+            case "admin":
+                return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+            default:
+                return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
     }
 }
