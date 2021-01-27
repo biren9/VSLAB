@@ -1,7 +1,7 @@
 package hska.iwi.eShopMaster.model;
 
 public class ApiConfig {
-    private static final String BASE_URL = "http://localhost:9001";
+    private static final String BASE_URL = "http://zuul:8080";
     private static final String API_URI = "/catalog-service";
     private static final String USER_API_URI = "/user-service";
     private static final String AUTHORIZATION_API_URI = "/authorization-service";
@@ -17,5 +17,5 @@ public class ApiConfig {
 
     public static final String ACCESS_TOKEN_URI = BASE_URL + AUTHORIZATION_API_URI + "/oauth/token";
 
-    public static final String AUTH_ME_URI = BASE_URL + AUTHORIZATION_API_URI + "/auth/me";
+    public static final String AUTH_ME_URI = BASE_URL + AUTHORIZATION_API_URI + "/self";
 }

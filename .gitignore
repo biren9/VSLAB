@@ -10,3 +10,7 @@ Category/.DS_Store
 Catalog/src/main/.DS_Store
 Webshop/.idea
 Webshop/src/.DS_Store
+Webshop/.settings/org.eclipse.core.resources.prefs
+Webshop/.settings/org.eclipse.jdt.core.prefs
+Webshop/.project
+Webshop/.classpath

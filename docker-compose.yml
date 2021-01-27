@@ -105,8 +105,6 @@ services:
       networks:
          - backend
 
-
-
    authorization:
       build:
          context: Authorization
@@ -123,26 +121,15 @@ services:
       networks:
          - backend
 
-   discovery:
-      build:
-         context: eureka
-         dockerfile: DOCKERFILE
-      ports:
-         - '9900:8761'
-      networks:
-         - backend
-
-
    webclient:
       build:
          context: Webshop
          dockerfile: Dockerfile
       restart: always
       ports:
-         - "8888:8080"
+         - '8888:8080'
       networks:
          - client-network
-
 
    # Database Service (Mysql)
    category-db:
