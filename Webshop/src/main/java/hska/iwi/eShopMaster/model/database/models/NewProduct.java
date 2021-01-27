@@ -4,14 +4,14 @@ public class NewProduct {
 
     private String name;
     private double price;
-    private int category;
-    private String details;
+    private int categoryID;
+    private String detail;
 
-    public NewProduct(String name, double price, int category, String details) {
+    public NewProduct(String name, double price, int category, String detail) {
         this.name = name;
         this.price = price;
-        this.category = category;
-        this.details = details;
+        this.categoryID = category;
+        this.detail = detail;
     }
 
     public NewProduct() {
@@ -33,19 +33,19 @@ public class NewProduct {
         this.price = price;
     }
 
-    public int getCategory() {
-        return this.category;
+    public int getCategoryID() {
+        return this.categoryID;
     }
 
-    public void setCategory(int category) {
-        this.category = category;
+    public void setCategoryID(int category) {
+        this.categoryID = category;
     }
 
-    public String getDetails() {
-        return this.details;
+    public String getDetail() {
+        return this.detail;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

@@ -94,7 +94,6 @@ services:
          - discovery
       networks:
          - backend
-         - client-network
 
    discovery:
       build:
@@ -129,7 +128,7 @@ services:
       ports:
          - '8888:8080'
       networks:
-         - client-network
+         - backend
 
    # Database Service (Mysql)
    category-db:
@@ -186,6 +185,4 @@ volumes:
 # Networks to be created to facilitate communication between containers
 networks:
    backend:
-      driver: bridge
-   client-network:
       driver: bridge

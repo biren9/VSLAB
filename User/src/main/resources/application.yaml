@@ -6,8 +6,9 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
+    driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://user-db:3306/user
     username: vs
     password: test

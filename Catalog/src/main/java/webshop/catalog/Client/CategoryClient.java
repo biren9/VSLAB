@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
@@ -22,17 +24,26 @@ import webshop.catalog.Model.Category;
 @Component
 public class CategoryClient { // extends BaseClient
 
+    @Autowired
+    private EurekaClient discoveryClient;
+
     private final Map<Long, Category> categoryCache = new LinkedHashMap<>();
-    private String host = "category-service"; // category-service
     @Autowired
     private RestTemplate categoryRestTemplate; // = restTemplate();
+
+
+    private String getInventoryURL() {
+        InstanceInfo instance = discoveryClient.getNextServerFromEureka("CATEGORY-SERVICE", false);
+        return instance.getHomePageUrl();
+    }
+
 
     // Fetch all categories and replace the current cache with the new result.
     @HystrixCommand(fallbackMethod = "getCategoriesCache", commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Iterable<Category> getCategories() {
         Collection<Category> categories = new HashSet<>();
-        Category[] tmpCategories = categoryRestTemplate.getForObject("http://"+host+"/categories", Category[].class);
+        Category[] tmpCategories = categoryRestTemplate.getForObject(getInventoryURL()+"categories", Category[].class);
         Collections.addAll(categories, tmpCategories);
         categoryCache.clear();
         categories.forEach(u -> categoryCache.put(u.getId(), u));
@@ -44,7 +55,7 @@ public class CategoryClient { // extends BaseClient
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Iterable<Category> getCategories(String name) {
         Collection<Category> categories = new HashSet<>();
-        Category[] tmpCategories = categoryRestTemplate.getForObject("http://"+host+"/categories?name=" + name, Category[].class);
+        Category[] tmpCategories = categoryRestTemplate.getForObject(getInventoryURL()+"categories?name=" + name, Category[].class);
         Collections.addAll(categories, tmpCategories);
         return categories;
     }
@@ -56,7 +67,7 @@ public class CategoryClient { // extends BaseClient
         if (categoryId == null) {
             return null;
         }
-        return categoryRestTemplate.getForObject("http://"+host+"/categories/" + categoryId, Category.class);
+        return categoryRestTemplate.getForObject(getInventoryURL()+"categories/" + categoryId, Category.class);
     }
 
 
@@ -64,7 +75,8 @@ public class CategoryClient { // extends BaseClient
     @HystrixCommand(fallbackMethod = "createCategoryFallback", commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Boolean createCategory(Category payload) {
-        categoryRestTemplate.postForObject("http://"+host+"/categories", payload, Category.class);
+        System.out.println("-----------" + getInventoryURL()+"categories");
+        categoryRestTemplate.postForObject(getInventoryURL()+"categories", payload, Category.class);
         return true;
     }
 
@@ -72,7 +84,7 @@ public class CategoryClient { // extends BaseClient
     @HystrixCommand(fallbackMethod = "updateCategoryFallback", commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Boolean updateCategory(Long categoryId, Category payload) {
-        categoryRestTemplate.put("http://"+host+"/categories/" + categoryId, payload);
+        categoryRestTemplate.put(getInventoryURL()+"categories/" + categoryId, payload);
         return true;
     }
 
@@ -80,7 +92,7 @@ public class CategoryClient { // extends BaseClient
     @HystrixCommand(fallbackMethod = "deleteCategoryFallback", commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
     public Boolean deleteCategory(Long categoryId) {
-        categoryRestTemplate.delete("http://"+host+"/categories/" + categoryId);
+        categoryRestTemplate.delete(getInventoryURL()+"categories/" + categoryId);
         return true;
     }
 
@@ -99,15 +111,18 @@ public class CategoryClient { // extends BaseClient
     }
 
     public Boolean createCategoryFallback(Category payload){
-        return false;
+        categoryCache.put(payload.getId(), payload);
+        return true;
     }
 
     public Boolean updateCategoryFallback(Long categoryId, Category payload){
-        return false;
+        categoryCache.put(payload.getId(), payload);
+        return true;
     }
 
     public Boolean deleteCategoryFallback(Long categoryId){
-        return false;
+        categoryCache.remove(categoryId);
+        return true;
     }
 
 }

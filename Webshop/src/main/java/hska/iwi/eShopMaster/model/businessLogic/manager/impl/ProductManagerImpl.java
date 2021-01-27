@@ -78,6 +78,8 @@ public class ProductManagerImpl implements ProductManager {
 				product = new NewProduct(name, price, categoryId, details);
 			}
 
+			System.out.println(API_PRODUCTS);
+
 			Product returnedProduct = oAuthRestTemplate.postForObject(API_PRODUCTS, product, Product.class);
 			productId = returnedProduct.getId();
 		}

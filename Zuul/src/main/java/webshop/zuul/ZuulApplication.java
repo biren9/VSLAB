@@ -33,7 +33,7 @@ public class ZuulApplication {
 					.authorizeRequests()
 					/**/.antMatchers("/authorization-service/**").permitAll()
 					/**/.antMatchers("/user-service/**").permitAll()
-					/**/.antMatchers("/catalog-service/**").permitAll() // Remove
+					/**/.antMatchers("/catalog-service/**").permitAll()
 					/**/.anyRequest().authenticated()
 					.and()
 					/**/.exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());

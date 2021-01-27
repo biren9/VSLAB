@@ -25,7 +25,7 @@ import webshop.catalog.Model.*;
 public class ProductClient { // extends BaseClient
 
 	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
-	private String host = "product-service";
+	private String host = "product-service:8080";
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -111,14 +111,19 @@ public class ProductClient { // extends BaseClient
 		return productCache.getOrDefault(productId, new Product());
 	}
 	
-	public Boolean createProductFallback(Product payload){ return false; }
+	public Boolean createProductFallback(Product payload){
+		productCache.put(payload.getId(), payload);
+		return true;
+	}
 
 	public Boolean updateProductFallback(Long productId, Product payload){
-		return false;
+		productCache.put(payload.getId(), payload);
+		return true;
 	}
 
 	public Boolean deleteProductFallback(Long productId){
-		return false;
+		productCache.remove(productId);
+		return true;
 	}
 	
 	

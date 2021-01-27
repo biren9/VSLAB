@@ -2,17 +2,17 @@ package hska.iwi.eShopMaster.model.database.models;
 
 public class NewCategory {
 
-    private String categoryName;
+    private String name;
 
-    public NewCategory(String categoryName) {
-        this.categoryName = categoryName;
+    public NewCategory(String name) {
+        this.name = name;
     }
 
-    public String getCategoryName() {
-        return this.categoryName;
+    public String getName() {
+        return this.name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

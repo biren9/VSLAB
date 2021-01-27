@@ -10,6 +10,7 @@ import hska.iwi.eShopMaster.model.database.models.NewCategory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -39,7 +40,8 @@ public class CategoryManagerImpl implements CategoryManager {
 	}
 
 	public Category getCategory(int id) {
-		return oAuthRestTemplate.getForObject(API_CATEGORIES + "/{id}", Category.class, id);
+		Predicate<Category> predicate = cat -> (cat.getId() ==  id); // Creating predicate
+		return getCategories().stream().filter(predicate).findFirst().get();
 	}
 
 	public Category getCategoryByName(String name) {
