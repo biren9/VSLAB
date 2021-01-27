@@ -94,6 +94,7 @@ services:
          - discovery
       networks:
          - backend
+         - client-network
 
    discovery:
       build:
@@ -131,6 +132,16 @@ services:
       networks:
          - backend
 
+
+   webclient:
+      build:
+         context: Webshop
+         dockerfile: DOCKERFILE
+      restart: always
+      ports:
+         - "8888:8080"
+      networks:
+         - client-network
 
 
    # Database Service (Mysql)
@@ -188,4 +199,6 @@ volumes:
 # Networks to be created to facilitate communication between containers
 networks:
    backend:
+      driver: bridge
+   client-network:
       driver: bridge
