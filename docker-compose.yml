@@ -136,7 +136,7 @@ services:
    webclient:
       build:
          context: Webshop
-         dockerfile: DOCKERFILE
+         dockerfile: Dockerfile
       restart: always
       ports:
          - "8888:8080"
