@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("self")
-    public Principal user(@AuthenticationPrincipal Principal principal) {
+    public Principal user(Principal principal) {
         return principal;
     }
 

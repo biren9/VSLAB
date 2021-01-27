@@ -23,8 +23,3 @@ eureka:
 
 server:
   context-path: /auth
-
-security:
-  oauth2:
-    resource:
-      user-info-uri: http://authorization-service:8080/self

@@ -19,4 +19,4 @@ hystrix:
 security:
   oauth2:
     resource:
-      user-info-uri: http://authorization-service:8080/self
+      user-info-uri: http://authorization:8080/self

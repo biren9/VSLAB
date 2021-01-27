@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import webshop.catalog.Client.CategoryClient;
 import webshop.catalog.Client.ProductClient;
@@ -25,6 +26,7 @@ class CatalogController {
     private CategoryClient categoryClient;
 
     @GetMapping("/catalog/products/{id}")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
     public ResponseEntity<Product> exactProducts(
             @ApiParam(value = "product Id", required = true) @PathVariable("id") Long id) {
 
