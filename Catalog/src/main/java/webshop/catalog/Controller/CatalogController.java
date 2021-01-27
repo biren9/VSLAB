@@ -26,7 +26,7 @@ class CatalogController {
     private CategoryClient categoryClient;
 
     @GetMapping("/catalog/products/{id}")
-    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_USER')")
     public ResponseEntity<Product> exactProducts(
             @ApiParam(value = "product Id", required = true) @PathVariable("id") Long id) {
 
@@ -43,6 +43,7 @@ class CatalogController {
     }
 
     @GetMapping("/catalog/products")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_USER')")
     public ResponseEntity<List<Product>> fetchCatalog(
             @NotNull @ApiParam(value = "Contains", required = false) @Valid @RequestParam(value = "contains", required = false) String contains,
             @NotNull @ApiParam(value = "minPrice", required = false) @Valid @RequestParam(value = "minPrice", required = false) Double minPrice,
@@ -58,6 +59,7 @@ class CatalogController {
     }
 
     @PostMapping("/catalog/products")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
     public ResponseEntity<Boolean> createCatalog(
             @ApiParam(value = "New product.", required = true) @RequestBody Product newProduct) {
 
@@ -75,6 +77,7 @@ class CatalogController {
     }
 
     @PutMapping("/catalog/products/{id}")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
     public ResponseEntity<Boolean> updateCategory(@PathVariable("id") Long id,
             @ApiParam(value = "New product.", required = true) @RequestBody Product newProduct) {
         if (categoryClient.getCategory(newProduct.getCategoryID()) == null) {
@@ -101,6 +104,7 @@ class CatalogController {
     }
 
     @DeleteMapping("/catalog/categories/{id}")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
     public ResponseEntity deleteCategory(@PathVariable("id") Long id) {
         Iterable<Product> products = productClient.getProducts(null, null, null);
         Boolean hasProductWithCurrentCategory = false;
@@ -127,6 +131,7 @@ class CatalogController {
     // Product forward
 
     @DeleteMapping("/catalog/products/{id}")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
     public ResponseEntity<Boolean> deleteProduct(
             @ApiParam(value = "product Id", required = true) @PathVariable("id") Long id) {
         if (productClient.deleteProduct(id)) {
@@ -139,12 +144,14 @@ class CatalogController {
     // Category forward
 
     @GetMapping("/catalog/categories")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_USER')")
     public ResponseEntity<List<Category>> fetchCategories() {
         Iterable<Category> categories = categoryClient.getCategories();
         return new ResponseEntity(categories, HttpStatus.OK);
     }
 
     @PostMapping("/catalog/categories")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
     public ResponseEntity<Boolean> createCategory(
             @ApiParam(value = "New Category.", required = true) @RequestBody Category newCategory) {
         Boolean success = categoryClient.createCategory(newCategory);
@@ -156,6 +163,7 @@ class CatalogController {
     }
 
     @PutMapping("/catalog/categories/{id}")
+    @PreAuthorize("#oauth2.hasScope('webshop-client-scope') and hasRole('ROLE_ADMIN')")
     public ResponseEntity<Boolean> updateCategory(@PathVariable("id") Long id,
             @ApiParam(value = "New product.", required = true) @RequestBody Category newCategory) {
         Boolean success = categoryClient.updateCategory(id, newCategory);
