@@ -64,8 +64,8 @@ public class ProductManagerImpl implements ProductManager {
 		return null;
 	}
 
-	public int addProduct(String name, double price, int categoryId, String details) {
-		int productId = -1;
+	public boolean addProduct(String name, double price, int categoryId, String details) {
+		boolean success = false;
 
 		CategoryManager categoryManager = new CategoryManagerImpl();
 		Category category = categoryManager.getCategory(categoryId);
@@ -80,11 +80,10 @@ public class ProductManagerImpl implements ProductManager {
 
 			System.out.println(API_PRODUCTS);
 
-			Product returnedProduct = oAuthRestTemplate.postForObject(API_PRODUCTS, product, Product.class);
-			productId = returnedProduct.getId();
+			success = oAuthRestTemplate.postForObject(API_PRODUCTS, product, Boolean.class);
 		}
 
-		return productId;
+		return success;
 	}
 
 	public void deleteProductById(int id) {

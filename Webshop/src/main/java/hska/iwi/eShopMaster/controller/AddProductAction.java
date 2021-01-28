@@ -31,10 +31,10 @@ public class AddProductAction extends ActionSupport {
 		if(user != null && (user.getRole().getTyp().equals("admin"))) {
 
 			ProductManager productManager = new ProductManagerImpl();
-			int productId = productManager.addProduct(name, Double.parseDouble(price), categoryId,
+			boolean success = productManager.addProduct(name, Double.parseDouble(price), categoryId,
 					details);
 
-			if (productId > 0) {
+			if (success) {
 				result = "success";
 			}
 		}
