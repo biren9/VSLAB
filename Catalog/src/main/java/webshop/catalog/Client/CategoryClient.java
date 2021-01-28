@@ -28,8 +28,8 @@ public class CategoryClient { // extends BaseClient
     private EurekaClient discoveryClient;
 
     private final Map<Long, Category> categoryCache = new LinkedHashMap<>();
-    @Autowired
-    private RestTemplate categoryRestTemplate; // = restTemplate();
+    //@Autowired
+    private RestTemplate categoryRestTemplate = new RestTemplate();
 
 
     private String getInventoryURL() {

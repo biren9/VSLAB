@@ -3,6 +3,8 @@ package webshop.catalog.Client;
 import java.math.BigDecimal;
 import java.util.*;
 
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +26,17 @@ import webshop.catalog.Model.*;
 @Component
 public class ProductClient { // extends BaseClient
 
+	@Autowired
+	private EurekaClient discoveryClient;
+
 	private final Map<Long, Product> productCache = new LinkedHashMap<Long, Product>();
 	private String host = "product-service:8080";
-	@Autowired
-	private RestTemplate restTemplate;
+	private RestTemplate restTemplate = new RestTemplate();
+
+	private String getProductURL() {
+		InstanceInfo instance = discoveryClient.getNextServerFromEureka("PRODUCT-SERVICE", false);
+		return instance.getHomePageUrl();
+	}
 
 	//get all Products/ filter Products
 	@HystrixCommand(fallbackMethod = "getProductsCache", commandProperties = {
@@ -44,7 +53,7 @@ public class ProductClient { // extends BaseClient
 			maxPrice = Double.MAX_VALUE;
 		}
 
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://"+host+"/products/")
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getProductURL()+"products/")
 				.queryParam("searchString", searchStr).queryParam("minPrice", minPrice)
 				.queryParam("maxPrice", maxPrice);
 
@@ -60,7 +69,7 @@ public class ProductClient { // extends BaseClient
 	@HystrixCommand(fallbackMethod = "getProductCache", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Product getProduct(Long productId) {
-		Product tmp = restTemplate.getForObject("http://"+host+"/products/" + productId, Product.class);
+		Product tmp = restTemplate.getForObject(getProductURL()+"products/" + productId, Product.class);
 		productCache.putIfAbsent(productId, tmp);
 		return tmp;
 	}
@@ -72,7 +81,7 @@ public class ProductClient { // extends BaseClient
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", "application/json");
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(payload, headers);
-		HttpEntity<String> response = restTemplate.exchange("http://"+host+"/products", HttpMethod.POST, request, String.class);
+		HttpEntity<String> response = restTemplate.exchange(getProductURL()+"products", HttpMethod.POST, request, String.class);
 		productCache.put(payload.getId(), payload);
 		return true;
 	}
@@ -84,7 +93,7 @@ public class ProductClient { // extends BaseClient
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", "application/json");
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity(payload, headers);
-		restTemplate.put("http://"+host+"/products/"+productId, request, String.class);
+		restTemplate.put(getProductURL()+"products/"+productId, request, String.class);
 		productCache.put(productId, payload);
 		return true;
 	}
@@ -92,7 +101,7 @@ public class ProductClient { // extends BaseClient
 	@HystrixCommand(fallbackMethod = "deleteProductFallback", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "2") })
 	public Boolean deleteProduct(Long productId) {
-		restTemplate.delete("http://"+host+"/products/" + productId);
+		restTemplate.delete(getProductURL()+"products/" + productId);
 		productCache.put(productId, null);
 		return true;
 	}
