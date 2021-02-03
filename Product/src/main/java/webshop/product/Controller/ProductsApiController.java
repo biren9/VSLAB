@@ -68,7 +68,7 @@ public class ProductsApiController {
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> exactProduct(
-            @NotNull @ApiParam(value = "Contains", required = false) @Valid @RequestParam(value = "contains", required = false) String contains,
+            @NotNull @ApiParam(value = "contains", required = false) @Valid @RequestParam(value = "contains", required = false) String contains,
             @NotNull @ApiParam(value = "minPrice", required = false) @Valid @RequestParam(value = "minPrice", required = false) BigDecimal minPrice,
             @NotNull @ApiParam(value = "maxPrice", required = false) @Valid @RequestParam(value = "maxPrice", required = false) BigDecimal maxPrice
     ) {

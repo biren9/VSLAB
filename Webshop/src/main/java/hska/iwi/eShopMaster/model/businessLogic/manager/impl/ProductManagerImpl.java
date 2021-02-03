@@ -42,16 +42,13 @@ public class ProductManagerImpl implements ProductManager {
 		return targetList;
 	}
 
-	public List<Product> getProductsForSearchValues(String searchDescription, Double searchMinPrice,
-			Double searchMaxPrice) {
-		URI targetUrl = UriComponentsBuilder.fromUriString(API_PRODUCTS) // Build the base link
-				.queryParam("description", searchDescription) // Add query params
-				.queryParam("minPrice", searchMinPrice) // Add query params
-				.queryParam("maxPrice", searchMaxPrice) // Add query params
-				.build() // Build the URL
-				.encode() // Encode any URI items that need to be encoded
-				.toUri();
-		Product[] products = oAuthRestTemplate.getForObject(targetUrl, Product[].class);
+	public List<Product> getProductsForSearchValues(String searchStr, Double minPrice,
+			Double maxPrice) {
+		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(API_PRODUCTS)
+			.queryParam("contains", searchStr).queryParam("minPrice", minPrice)
+			.queryParam("maxPrice", maxPrice);
+
+		Product[] products = oAuthRestTemplate.getForObject(builder.build().encode().toUri(), Product[].class);
 		List<Product> targetList = new ArrayList<Product>(Arrays.asList(products));
 		return targetList;
 	}

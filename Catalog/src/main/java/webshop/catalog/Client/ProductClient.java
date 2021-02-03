@@ -54,7 +54,7 @@ public class ProductClient { // extends BaseClient
 		}
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(getProductURL()+"products/")
-				.queryParam("searchString", searchStr).queryParam("minPrice", minPrice)
+				.queryParam("contains", searchStr).queryParam("minPrice", minPrice)
 				.queryParam("maxPrice", maxPrice);
 
 		Product[] tmpProducts = restTemplate.getForObject(builder.build().encode().toUri(), Product[].class);

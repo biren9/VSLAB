@@ -23,7 +23,7 @@ public class SearchAction extends ActionSupport{
 	private static final long serialVersionUID = -6565401833074694229L;
 	
 	
-	private String searchDescription = null;
+	private String searchStr = null;
 	private String searchMinPrice;
 	private String searchMaxPrice;
 	
@@ -47,14 +47,14 @@ public class SearchAction extends ActionSupport{
 		if(user != null){
 			// Search products and show results:
 			ProductManager productManager = new ProductManagerImpl();
-//			this.products = productManager.getProductsForSearchValues(this.searchDescription, this.searchMinPrice, this.searchMaxPrice);
+//			this.products = productManager.getProductsForSearchValues(this.searchStr, this.searchMinPrice, this.searchMaxPrice);
 			if (!searchMinPrice.isEmpty()){
 				sMinPrice =  Double.parseDouble(this.searchMinPrice);
 			}
 			if (!searchMaxPrice.isEmpty()){
 				sMaxPrice =  Double.parseDouble(this.searchMaxPrice);
 			}
-			this.products = productManager.getProductsForSearchValues(this.searchDescription, sMinPrice, sMaxPrice);
+			this.products = productManager.getProductsForSearchValues(this.searchStr, sMinPrice, sMaxPrice);
 			
 			// Show all categories:
 			CategoryManager categoryManager = new CategoryManagerImpl();
@@ -94,12 +94,12 @@ public class SearchAction extends ActionSupport{
 
 
 	public String getSearchValue() {
-		return searchDescription;
+		return searchStr;
 	}
 
 
 	public void setSearchValue(String searchValue) {
-		this.searchDescription = searchValue;
+		this.searchStr = searchValue;
 	}
 
 
