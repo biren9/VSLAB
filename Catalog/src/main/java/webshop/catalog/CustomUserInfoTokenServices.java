@@ -25,7 +25,7 @@ public class CustomUserInfoTokenServices implements ResourceServerTokenServices 
     protected final Log logger = LogFactory.getLog(getClass());
 
     private static final String[] PRINCIPAL_KEYS = new String[] { "user", "username", "userid", "user_id", "login",
-            "id", "name" };
+            "id" };
 
     private final String userInfoEndpointUrl;
 

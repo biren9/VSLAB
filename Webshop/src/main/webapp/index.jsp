@@ -77,7 +77,7 @@
 		
 	<font color="red">
 		<s:actionerror/>
-	</font>	
+	</font>
 	</body>
 </html>
 

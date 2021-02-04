@@ -32,8 +32,13 @@ public class DeleteCategoryAction extends ActionSupport {
 
 			// Helper inserts new Category in DB:
 			CategoryManager categoryManager = new CategoryManagerImpl();
-		
-			categoryManager.delCategoryById(catId);
+
+
+			try {
+				categoryManager.delCategoryById(catId);
+			} catch (Exception e) {
+				addActionError(getText("error.category.not.empty"));
+			}
 
 			categories = categoryManager.getCategories();
 				
